@@ -28,43 +28,45 @@ public class Anagram {
 
 	// Returns true if the two given strings are anagrams, false otherwise.
 	public static boolean isAnagram(String str1, String str2) {
+		// preprocess both strings
 		str1 = preProcess(str1);
 		str2 = preProcess(str2);
 
+        // lengths must match after preprocessing
 		if (str1.length() != str2.length()) return false;
 
-		// frequency arrays (ASCII)
+		// frequency counting for ASCII
 		int[] freq = new int[256];
-		for (int i = 0; i < str1.length(); i++) freq[str1.charAt(i)]++;
-		for (int i = 0; i < str2.length(); i++) freq[str2.charAt(i)]--;
 
-		for (int i = 0; i < 256; i++)
+		for (int i = 0; i < str1.length(); i++)
+			freq[str1.charAt(i)]++;
+
+		for (int i = 0; i < str2.length(); i++)
+			freq[str2.charAt(i)]--;
+
+		for (int i = 0; i < freq.length; i++)
 			if (freq[i] != 0) return false;
 
 		return true;
 	}
 	   
-	// Returns a preprocessed version of the given string: all the letter characters are converted
-	// to lower-case, and all the other characters are deleted, except for spaces, which are left
-	// as is.
+	// Preprocess: keep only letters, make lowercase, delete everything else (including spaces).
 	public static String preProcess(String str) {
 		String result = "";
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 
-			if (c == ' ') {
-				result += c;
-			} else if (c >= 'A' && c <= 'Z') {
-				result += (char)(c + 32);  // convert to lowercase
+			if (c >= 'A' && c <= 'Z') {
+				result += (char)(c + 32); // lowercase
 			} else if (c >= 'a' && c <= 'z') {
 				result += c;
 			}
-			// all other characters deleted
+			// all else deleted (spaces included)
 		}
 		return result;
 	} 
 	   
-	// Returns a random anagram of the given string. 
+	// Returns a random anagram of the given string.
 	public static String randomAnagram(String str) {
 		String temp = str;
 		String result = "";
