@@ -22,10 +22,13 @@ public class LoanCalc {
 		// Computes the periodical payment using bisection search
 		System.out.print("\nPeriodical payment, using bi-section search: ");
 		System.out.println((int) bisectionSolver(loan, rate, n, epsilon));
-		System.out.println("number of iterations: " + iterationCounter);
+        System.out.println("number of iterations: " + iterationCounter);
 	}
 
-	// Computes the ending balance of a loan
+
+	// ------------------------------------------------------------
+	// END BALANCE
+	// ------------------------------------------------------------
 	private static double endBalance(double loan, double rate, int n, double payment) {	
 		double balance = loan;
 
@@ -35,15 +38,16 @@ public class LoanCalc {
 
 		return balance;
 	}
-	
-	// Brute force search
+
+
+	// ------------------------------------------------------------
+	// BRUTE FORCE SOLVER
+	// ------------------------------------------------------------
 	public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {
 		iterationCounter = 0;
 
-		// Start with loan/n (definitely too small → f(g) > 0)
-		double g = loan / n;
+		double g = loan / n; // definitely too small → f(g) > 0
 
-		// Increase until ending balance becomes ≤ 0
 		while (endBalance(loan, rate, n, g) > 0) {
 			g += epsilon;
 			iterationCounter++;
@@ -51,19 +55,21 @@ public class LoanCalc {
 
 		return g;
 	}
-    
-	// Bisection search
+
+
+	// ------------------------------------------------------------
+	// BISECTION SOLVER
+	// ------------------------------------------------------------
 	public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
 		iterationCounter = 0;
 
-		// L is too small → f(L) > 0
-		double L = loan / n;
+		double L = loan / n;  // too small → f(L) > 0
+		double H = loan;      // likely too big
 
-		// H must be large enough so f(H) < 0
-		double H = loan;  
-		while (endBalance(loan, rate, n, H) > 0) {
-			H *= 2;   // expand interval until we bracket the root
-		}
+		// Expand H until f(H) < 0
+        while (endBalance(loan, rate, n, H) > 0) {
+            H *= 2;
+        }
 
 		// Bisection loop
 		while (H - L > epsilon) {
@@ -74,11 +80,9 @@ public class LoanCalc {
 			double fM = endBalance(loan, rate, n, mid);
 
 			if (fL * fM > 0) {
-				// root is between mid and H
-				L = mid;
+				L = mid; // root is between mid and H
 			} else {
-				// root is between L and mid
-				H = mid;
+				H = mid; // root is between L and mid
 			}
 		}
 
