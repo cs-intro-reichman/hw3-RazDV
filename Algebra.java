@@ -24,82 +24,120 @@ public class Algebra {
 	}  
 
 	// Returns x1 + x2
-	public static int plus(int x1, int x2) {
-		for (int i = 0; i < x2; i++){
-			x1++;
-		}
-		return x1;
-	}
+    public static int plus(int x1, int x2) {
+        if (x2 > 0) {
+            for (int i = 0; i < x2; i++) x1++;
+        } else {
+            for (int i = 0; i > x2; i--) x1--;
+        }
+        return x1;
+    }
 
 	// Returns x1 - x2
-	public static int minus(int x1, int x2) {
-		for (int i = 0; i < x2; i++){
-			x1--;
-		}
-		return x1;
-	}
+    public static int minus(int x1, int x2) {
+        if (x2 > 0) {
+            for (int i = 0; i < x2; i++) x1--;
+        } else {
+            for (int i = 0; i > x2; i--) x1++;
+        }
+        return x1;
+    }
+
 
 	// Returns x1 * x2
-	public static int times(int x1, int x2) {
-		int originalX1 = x1;
-		for (int i = 1; i < x2; i++){
-			x1 = plus(x1,originalX1);
-		}
-		return x1;
-	}
+    public static int times(int x1, int x2) {
+        if (x1 == 0 || x2 == 0) return 0;
+
+        int plusOrMinus = 1;
+
+        // fix x1 sign
+        if (x1 < 0) {
+            x1 = minus(0, x1); 
+            plusOrMinus = minus(0, plusOrMinus);
+        }
+        // fix x2 sign
+        if (x2 < 0) {
+            x2 = minus(0, x2); 
+            plusOrMinus = minus(0, plusOrMinus);
+        }
+
+        int ans = 0;
+
+        for (int i = 0; i < x2; i++) {
+            ans = plus(ans, x1);
+        }
+
+        if (plusOrMinus < 0) ans = minus(0, ans);
+
+        return ans;
+    }
+
+
 
 	// Returns x^n (for n >= 0)
-	public static int pow(int x, int n) {
-		if (n == 0) return 1;
-		else {
-			int originalX = x;
-			for (int i = 1; i < n; i++){
-				x = times(x,originalX);
-		}
-			return x;
-		}
-	}
+    public static int pow(int x, int n) {
+        if (n == 0) return 1;
+
+        int ans = 1;
+        for (int i = 0; i < n; i++) {
+            ans = times(ans, x);
+        }
+        return ans;
+    }
 
 	// Returns the integer part of x1 / x2 
-	public static int div(int x1, int x2) {
-		int times = 1;
-		if (minus(x1,x2) < 0) {
-			return 0; }
-			while (minus(x1,x2) >= x2){
-				times++;
-				x1 = minus(x1,x2);
-			}
-			return times;
-		}
+    public static int div(int x1, int x2) {
+        if (x2 == 0) return 0;
+
+        int plusOrMinus = 1;
+
+        if (x1 < 0) {
+            x1 = minus(0, x1);
+            plusOrMinus = minus(0, plusOrMinus);
+        }
+        if (x2 < 0) {
+            x2 = minus(0, x2);
+            plusOrMinus = minus(0, plusOrMinus);
+        }
+
+        int ans = 0;
+        while (x1 >= x2) {
+            x1 = minus(x1, x2);
+            ans++;
+        }
+
+        if (plusOrMinus < 0) ans = minus(0, ans);
+
+        return ans;
+    }
+
 
 	// Returns x1 % x2
-	public static int mod(int x1, int x2) {
-		if (minus(x1,x2) < 0) {
-			return x1;
-		}
-		else 
-		return minus(x1, times(x2,div(x1,x2)));
-	}	
+    public static int mod(int x1, int x2) {
+        int q = div(x1, x2);
+        return minus(x1, times(q, x2));
+    }
 
 	// Returns the integer part of sqrt(x) 
-	public static int sqrt(int x) {
-		int L = 0;
-		int H = x;
-		int ans = 0;
-		
-		while (minus(H,L) > 0) {
-		int mid = div(plus(L,H),2);
-		int midSquare = times(mid,mid);
+    public static int sqrt(int x) {
+        if (x <= 0) return 0;
+        int Low = 0;
+        int High = x;
+        int ans = 0;
 
-		if (midSquare == x) return mid;
-		
-		if (midSquare < x) {
-			ans = mid;
-			L = plus(mid,1); //because it gets stuck and I know that mid is not the root, but it may be the integer root.
-		} else {
-			H = minus(mid,1); // because it gets stuck, and I know that mid is not the root. but I don't set it as ans because the integer root needs to be smaller or equal the the root.
-		}
-	}	  	  
-	return ans;
-	}
+        while (Low <= High) {
+            int mid = div(plus(Low, High), 2);
+            int midSq = times(mid, mid);
+
+            if (midSq == x) return mid;
+
+            if (midSq < x) {
+                ans = mid;
+                Low = plus(mid, 1);
+            } else {
+                High = minus(mid, 1);
+            }
+        }
+        return ans;
+    }
 }
