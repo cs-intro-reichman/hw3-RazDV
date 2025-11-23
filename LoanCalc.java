@@ -1,3 +1,16 @@
+/*
+
+Feedback:
+
+Great Work!
+
+Yam
+
+*/
+
+
+
+
 // Computes the periodical payment necessary to pay a given loan.
 public class LoanCalc {
 	
@@ -38,6 +51,26 @@ public class LoanCalc {
 
 		return balance;
 	}
+	
+	// Uses sequential search to compute an approximation of the periodical payment
+	// that will bring the ending balance of a loan close to 0.
+	// Given: the sum of the loan, the periodical interest rate (as a percentage),
+	// the number of periods (n), and epsilon, the approximation's accuracy
+	// Side effect: modifies the class variable iterationCounter.
+    public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {
+		// Replace the following statement with your code
+		return 0;
+    }
+    
+    // Uses bisection search to compute an approximation of the periodical payment 
+	// that will bring the ending balance of a loan close to 0.
+	// Given: the sum of the loan, the periodical interest rate (as a percentage),
+	// the number of periods (n), and epsilon, the approximation's accuracy
+	// Side effect: modifies the class variable iterationCounter.
+    public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
+        // Replace the following statement with your code
+		return 0;
+    }
 
 
 	// ------------------------------------------------------------
